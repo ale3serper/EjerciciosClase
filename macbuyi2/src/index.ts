@@ -1,6 +1,9 @@
 import { connectToMongoDB } from "./mongo";
 import express from "express";
 import rutillas from "./routes"
+import dotenv from "dotenv";
+dotenv.config();
+
 
 
 connectToMongoDB();

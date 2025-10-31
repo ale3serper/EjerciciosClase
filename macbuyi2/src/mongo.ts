@@ -1,4 +1,6 @@
 import { Db, MongoClient } from "mongodb";
+import dotenv from "dotenv";
+
 
 
 
@@ -8,7 +10,7 @@ let db: Db;
 
 export const connectToMongoDB = async (): Promise<void> => {
     try{
-        const urlMongo="mongodb+srv://ale3serper_db_user:EsOhP2e7zxD930Q8@cluster0.34cugvl.mongodb.net/?appName=Cluster0";
+        const urlMongo=`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.CLUSTER}.34cugvl.mongodb.net/?appName=${process.env.CLUSTER_NAME}`;
         client = new MongoClient(urlMongo);
         await client.connect();
         db = client.db("ClaseSistemas")
