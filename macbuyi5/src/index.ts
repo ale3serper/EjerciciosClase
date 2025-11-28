@@ -3,6 +3,7 @@ import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
 import dotenv from "dotenv";
 import { ApolloServer } from "apollo-server";
+import { getUserFromToken } from "./auth";
 
 
 dotenv.config();
@@ -14,8 +15,11 @@ const start= async ()=>{
     const server= new ApolloServer({
         typeDefs,
         resolvers,
-        context: ({req,res})=>{
-            return {req};
+        context: async ({req})=>{
+            const authHeader= req.headers.authorization;
+            const user= authHeader ? await getUserFromToken(authHeader!): null;
+
+            return{user};
         }
     });
 
