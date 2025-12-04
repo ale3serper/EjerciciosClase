@@ -6,6 +6,7 @@ import { signToken } from "../auth";
 
 
 const collectionName= "juegos";
+const COLLECTION= "users";
 
 export const resolvers: IResolvers = {
     Query: {
@@ -22,7 +23,7 @@ export const resolvers: IResolvers = {
            
            return {
             id: user._id.toString(),
-            email: user.email
+            ...user
 
            }
 
@@ -53,6 +54,37 @@ export const resolvers: IResolvers = {
             if(!user) throw new Error("El login esta mal hecho");
 
             return signToken(user._id.toString());
+        },
+
+        addGameToList: async(_,{videoGameId}: {videoGameId: string}, {user})=>{
+            if (!user) throw new Error("Logeate chaval");
+
+            const db= getDB();
+            const videoGameToAdd= await db.collection(collectionName).findOne({_id: new ObjectId(videoGameId)});
+            if (!videoGameToAdd)throw new Error("No existe chaval");
+
+            await db.collection(COLLECTION).updateOne({_id: user._id}, {$addToSet: {listOfMyGames: videoGameToAdd._id}})
+
+            const updateUser = await db.collection(COLLECTION).findOne({_id: user._id});
+            if(!updateUser)if (!user) throw new Error("Usuario no encontrado");
+
+            return {
+                id: updateUser?._id.toString(),
+                ...updateUser
+            }
+        }
+    },
+
+    User:{
+        listOfMyGames: async (parent)=>{
+            const db= getDB();
+            const listOfVideoGameIds= parent.listOfMyGames as Array<string>|| [];
+
+            const videoGamesListOfObjects= await db.collection(collectionName).find({
+                _id: {$in: listOfVideoGameIds.map(id=> new ObjectId(id))}
+            }).toArray();
+
+            return videoGamesListOfObjects;
         }
     }
 }
