@@ -3,14 +3,15 @@ import { getDB } from "../db/mongo";
 import bcrypt from "bcryptjs";
 
 
-const COLLECTION= "users";
+const userCollection="users";
 
-export const createUser= async (email: string, password: string)=>{
+export const createUser= async (username: string,email: string, password: string)=>{
     const db= getDB();
 
     const passwordEncriptada= await bcrypt.hash(password,10);
 
-    const result= await db.collection(COLLECTION).insertOne({
+    const result= await db.collection(userCollection).insertOne({
+       username,
         email, 
         pasword:passwordEncriptada
     });
@@ -20,7 +21,7 @@ export const createUser= async (email: string, password: string)=>{
 
 export const validateUser= async (email: string, password: string)=>{
     const db= getDB();
-    const user = await db.collection(COLLECTION).findOne({email});
+    const user = await db.collection(userCollection).findOne({email});
    
     if(!user) return null;
 
@@ -32,6 +33,6 @@ export const validateUser= async (email: string, password: string)=>{
 
 export const findUserById= async (id: string)=>{
     const db= getDB();
-    return await db.collection(COLLECTION).findOne({_id: new ObjectId(id)});
+    return await db.collection(userCollection).findOne({_id: new ObjectId(id)});
 
 }

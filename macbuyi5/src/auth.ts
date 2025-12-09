@@ -3,7 +3,10 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { getDB } from "./db/mongo";
 import { ObjectId } from "mongodb";
+
 dotenv.config();
+
+const userCollection="users";
 
 export type TokenPayload={
     userId: string;
@@ -29,7 +32,7 @@ export const getUserFromToken= async (token: string)=>{
     if(!payload) return null;
 
     const db= getDB();
-    return  await db.collection("users").findOne({
+    return  await db.collection(userCollection).findOne({
         _id: new ObjectId(payload.userId)
     });
     

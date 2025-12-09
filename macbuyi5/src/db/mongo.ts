@@ -6,6 +6,7 @@ dotenv.config();
 
 let client: MongoClient;
 let miBase: Db;
+const nombreBase="ProjectManagement"
 
 
 export const connectToMongoDB = async (): Promise<void> => {
@@ -13,7 +14,7 @@ export const connectToMongoDB = async (): Promise<void> => {
         const urlMongo=`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.CLUSTER}.34cugvl.mongodb.net/?appName=${process.env.CLUSTER_NAME}`;
         client = new MongoClient(urlMongo);
         await client.connect();
-        miBase = client.db("VideoGames")
+        miBase = client.db(nombreBase)
         console.log("Estas completamente in");
     }
     catch(err){

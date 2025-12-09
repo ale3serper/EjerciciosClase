@@ -1,31 +1,58 @@
-import { gql } from 'apollo-server';
-
+import { gql } from "apollo-server"
 
 export const typeDefs = gql`
-
-    type VideoGame{
+    type User{
+        _id: ID!
+        username: String!
+        email: String!
+        createdAt: String!
+    }
+    
+    type Project{
         _id: ID!
         name: String!
-        platform: String!
-        releaseYear: Int!
+        description: String!
+        startDate: String!
+        endDate: String!
+        owner: ID!
+        members: [ID!]!
+        tasks: [Task!]!
     }
-    type User{
-        id: ID!
-        email: String!
-        listOfMyGames: [VideoGame!]
+
+    type Task{
+        _id: ID!
+        title: String!
+        projectId: ID!
+        assignedTo: ID!
+        status: String!
+        priority: String!
+        dueDate: String!
+    }
+
+    type AuthPayload{
+        token: String!
     }
     
     type Query {
-        me: User,
-        getVideoGames: [VideoGame!]!,
-        getVideoGame(_id: ID!): VideoGame
+        me: User
+        myProjects: [Project!]!
+        projectDetails(projectId: ID!): Project!
+        users: [User!]!
     }
 
     type Mutation {
-        addVideoGame(name: String!, platform: String!, releaseYear: Int! ): VideoGame!
-        register(email: String!, password: String!): String!
-        login(email: String!, password: String! ): String!
-        addGameToList(videoGameId: ID!): User!
+        register(username: String!, email: String!, password: String!): AuthPayload!
+        login(email: String!, password: String!): AuthPayload!
+
+        createProject(name:String!, description:String!, startDate: Int!, endDate:Int!, members: [ID!]!): Project!
+        updateProject(id: ID!,name:String!, description:String!, startDate: Int!, endDate:Int!, members:[ID!]!): Project!
+        deleteProject(id: ID!):Project!
+        addMember(projectId: ID!, userId:ID!): Project!
+
+        createTask(projectId: ID!, title: String!, assignedTo:ID!, status:String!, priority:String!, dueDate:Int!): Task!
+        updateTaskStatus(taskId:ID!, status: String!):Task!
+
+       
     }
 
 `;
