@@ -1,8 +1,8 @@
 import { IResolvers } from "@graphql-tools/utils";
-import { crearRopa, createUser, validateUser } from "../collections/users";
+import {  createUser, validateUser } from "../collections/users";
 import { signToken } from "../auth";
-import { buyRopa, getRopa, getRopaFromIds } from "../collections/ropa";
-import { getDB } from "../db/mongo";
+import { buyRopa, getRopa, getRopaFromIds, getRopaPorId } from "../collections/ropa";
+import {crearRopa} from "../collections/ropa";
 
 
 
@@ -21,7 +21,7 @@ export const resolvers: IResolvers= {
             return await getRopa(page,size);
         },
         clothing: async (_,{id})=>{
-            return await getRopa(id);
+            return await getRopaPorId(id);
         }
     },
 
@@ -46,9 +46,7 @@ export const resolvers: IResolvers= {
         addClothing: async(_,{name,size,color, price},{user})=>{
             if(!user) throw new Error("Tienes que estar logado");
 
-            const result = await crearRopa(name,size,color,price);
-
-            return result;
+            return await crearRopa(name,size,color,price);
 
         },
         buyClothing: async(_,{clothingId},{user})=>{

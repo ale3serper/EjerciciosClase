@@ -31,10 +31,10 @@ export const crearRopa= async(name: string, size: string, color: string, price: 
         price
     });
 
-    const newClothing= await getRopaPorId(result.insertedId.toString());
+    return await getRopaPorId(result.insertedId.toString());
 
-    return newClothing;
-};
+    
+}
 
 export const buyRopa= async (idRopa: string, userId: string)=>{
     const db= getDB();

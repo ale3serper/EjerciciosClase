@@ -12,7 +12,7 @@ let db: Db;
 
 export const connectToMongo= async ()=>{
     try{
-        const urlMongo=`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.CLUSTER}.34cugvl.mongodb.net/?appName=${process.env.CLUSTER_NAME}`;
+        const urlMongo=process.env.MONGO_URL;
         if(!urlMongo) throw new Error("No has metido la url de mongo mongolo");
 
         client= new MongoClient(urlMongo);

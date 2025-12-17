@@ -29,8 +29,3 @@ export const validateUser= async (email: string, password: string)=>{
     return user;
 }
 
-export const crearRopa= async(name: string, size: string, color: string, prize: number)=>{
-    const db= getDB();
-
-    const result= await db.collection(clothingCollection)
-}

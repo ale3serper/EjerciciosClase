@@ -20,7 +20,7 @@ const start= async ()=>{
         }
     });
 
-    await server.listen({port: 4069});
+    await server.listen({port: 4000});
     console.log("gql esta a tope");
 };
 
